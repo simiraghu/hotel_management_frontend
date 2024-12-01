@@ -1,13 +1,119 @@
-body {
+
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Main Login Form Design */
+.mainLoginDiv {
+  display: flex;
+  justify-content: flex-start;
+  color: white;
+  min-height: 100vh; /* Ensures the container always spans the full viewport height */
+}
+
+.leftSide {
+  background-color: #8db8b4;
+  width: 40%;
+  min-height: 100vh; /* Matches the height of the parent */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.leftSideText {
+  text-align: center;
+  font-weight: 900;
+  font-size: 1.8rem;
+}
+
+.signupbutton {
+  background-color: #27877e;
+  padding: 15px 40px;
+  border: 1px solid white;
+  border-radius: 25px;
+  color: white;
+  cursor: pointer;
+  width: 20vw;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.signupbutton:hover {
+  background-color: #6daca6;
+  transform: scale(1.05);
+}
+
+.rightSide {
+  width: 60%;
+  color: black;
+  min-height: 100vh; /* Matches the height of the parent */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rightSideInputs {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid black;
+  border-radius: 20px;
+  font-size: 1rem;
+}
+
+.signinbutton {
+  background-color: #27877e;
+  padding: 12px 40px;
+  border: 1px solid black;
+  border-radius: 30px;
+  color: white;
+  cursor: pointer;
+  width: 20vw;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.signinbutton:hover {
+  background-color: #216f66;
+  transform: scale(1.05);
+}
+
+.signinheading {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.rightSideInputsforSignup {
+  text-align: center;
+  margin-top: 2rem;
+  width: 25vw;
+}
+
+.leftSideContent {
+  font-size: 1.4rem;
+  margin: 1rem;
+}
+
+/* Reset HTML and Body to Remove Any Extra Margin or Padding */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* Ensure full height for consistent layout */
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: black;
+}
+
+.slick-dots li button:before {
+  color: gray;
 }
