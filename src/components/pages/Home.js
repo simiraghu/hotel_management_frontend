@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -14,6 +14,36 @@ import { useNavigate } from 'react-router-dom';
 const HomePage = () => {
 
   const navigate = useNavigate()
+  const [value, setValue] = useState(
+    {
+      check_in_date: "",
+      check_out_date: "",
+      roomtype: "Deluxe"
+    }
+  )
+
+  const handleOnChange = (e) => {
+    setValue(
+      {
+        ...value,
+        [e.target.name]: e.target.value
+      }
+    )
+  }
+
+  // const dispatch = useDispatch()
+
+  const handleOnSubmit = (e) => {
+    e.preventDefault()
+    // dispatch(GetAllRooms(
+    //   {
+    //     check_in_date: moment(value?.check_in_date).toISOString(),
+    //     check_out_string: moment(value?.check_out_date).toISOString(),
+    //     roomtype: value?.roomtype
+    //   }
+    // ))
+    navigate(`/rooms?check_in_date=${value?.check_in_date}&check_out_date=${value?.check_out_date}&roomtype=${value?.roomtype}`)
+  }
 
   return (
     <Box
@@ -69,12 +99,17 @@ const HomePage = () => {
             Book your stay with exclusive offers and enjoy premium services.
           </Typography>
 
-          <Box
-            display="flex"
-            justifyContent="center"
-            mt={4}
-            gap={2}>
-
+          <form
+            onSubmit={handleOnSubmit}
+            style={
+              {
+                display: 'flex',
+                justifyContent: 'center',
+                marginTop: '9px',
+                gap: '3px'
+              }
+            }
+          >
             <TextField
               label="Check-in Date"
               type="date"
@@ -83,6 +118,9 @@ const HomePage = () => {
                   shrink: true
                 }
               }
+              name="check_in_date"
+              value={value?.check_in_date}
+              onChange={(e) => handleOnChange(e)}
               sx={
                 {
                   bgcolor: 'white',
@@ -93,6 +131,9 @@ const HomePage = () => {
             <TextField
               label="Check-out Date"
               type="date"
+              name="check_out_date"
+              value={value?.check_out_date}
+              onChange={(e) => handleOnChange(e)}
               InputLabelProps={
                 {
                   shrink: true
@@ -108,6 +149,9 @@ const HomePage = () => {
             <TextField
               label="Room Type"
               select
+              name="roomtype"
+              value={value?.roomtype}
+              onChange={(e) => handleOnChange(e)}
               SelectProps={
                 {
                   native: true
@@ -120,18 +164,18 @@ const HomePage = () => {
                 }
               }>
               <option value="Deluxe">Deluxe</option>
-              <option value="Suite">Suite</option>
-              <option value="Executive">Executive</option>
+              <option value="Family">Family</option>
             </TextField>
 
             <Button
               variant="contained"
               size="large"
+              type="submit"
               sx={{ backgroundColor: "#27877e" }}
             >
               Search
             </Button>
-          </Box>
+          </form>
         </Box>
       </Box>
 
@@ -268,7 +312,7 @@ const HomePage = () => {
                 </Button>
               </CardContent>
             </Card>
-            
+
           </Grid>
         </Grid>
       </Box>

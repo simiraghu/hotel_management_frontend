@@ -14,10 +14,11 @@ import {
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { useDispatch, useSelector } from 'react-redux';
 import { GetAllHotels } from '../../features/HotelSlice';
-import { GetRoomById, UpdateRoom } from '../../features/RoomSlice';
+import { ClearRoomState, GetRoomById, UpdateRoom } from '../../features/RoomSlice';
 import { useLocation, useNavigate } from 'react-router-dom'
 import Avatar from '@mui/material/Avatar';
 import CancelIcon from '@mui/icons-material/Cancel';
+import Alert from '@mui/material/Alert'
 
 const Create_Room = () => {
 
@@ -26,7 +27,10 @@ const Create_Room = () => {
     const dispatch = useDispatch()
 
     const { hotels } = useSelector((state) => state?.hotels)
-    const { room } = useSelector((state) => state?.rooms)
+    const { room, error, updateroom } = useSelector((state) => state?.rooms)
+
+    const [isErrorAlert, setIsErrorAlert] = useState(false)
+    const [isSuccessAlert, setIsSuccessAlert] = useState(false)
 
     const [value, setValue] = useState(
         {
@@ -55,6 +59,27 @@ const Create_Room = () => {
             }
         )
     }, [dispatch, room?.hotelId])
+
+
+    useEffect(() => {
+        if (error) {
+            setIsErrorAlert(true)
+            setTimeout(() => {
+                setIsErrorAlert(false)
+            }, 3000);
+        }
+
+        if (updateroom?.message) {
+            setIsSuccessAlert(true)
+            setTimeout(() => {
+                setIsSuccessAlert(false)
+                navigate('/rooms')
+                dispatch(ClearRoomState())
+            }, 3000);
+        }
+
+    }, [error, updateroom?.message])
+
 
     const handleOnChange = (e) => {
         setValue(
@@ -89,6 +114,7 @@ const Create_Room = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log(value, "value")
+
         const formData = new FormData()
         formData.append('hotelId', value?.hotelId)
         formData.append('roomtype', value?.roomtype)
@@ -101,7 +127,6 @@ const Create_Room = () => {
 
         dispatch(UpdateRoom({ value: formData, roomId: roomId }))
 
-        // navigate('/rooms')
     }
 
     return (
@@ -123,6 +148,9 @@ const Create_Room = () => {
                 <Typography variant="h5" gutterBottom>
                     Update Room
                 </Typography>
+
+                {isErrorAlert && <Alert color="error">{error}</Alert>}
+                {isSuccessAlert && <Alert color="success">{updateroom?.message}</Alert>}
 
                 {/* Hotel Dropdown */}
                 <FormControl fullWidth margin="normal">

@@ -5,13 +5,20 @@ const initialState = {
     rooms: [],
     loading: false,
     error: "",
-    room: {}
+    room: {},
+    updateroom: {}
 }
 
-export const GetAllRooms = createAsyncThunk('getallrooms', async (_, { rejectWithValue }) => {
+export const GetAllRooms = createAsyncThunk('getallrooms', async ({ check_in_date, check_out_date, roomtype }, { rejectWithValue }) => {
     try {
-        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/room/get_all_rooms`)
-        return data?.rooms
+        if (check_in_date && check_out_date && roomtype) {
+            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/room/get_all_rooms?check_in_date=${check_in_date}&check_out_date=${check_out_date}&roomtype=${roomtype}`)
+            return data?.rooms
+
+        } else {
+            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/room/get_all_rooms`)
+            return data?.rooms
+        }
 
     } catch (error) {
         return rejectWithValue(error?.response?.data?.message)
@@ -51,7 +58,7 @@ export const UpdateRoom = createAsyncThunk('updateroom', async ({ value, roomId 
                 'Content-Type': 'multipart/form-data'
             }
         })
-        return data?.room
+        return data
 
     } catch (error) {
         return rejectWithValue(error?.response?.data?.message)
@@ -73,12 +80,22 @@ export const DeleteRoom = createAsyncThunk('deleteroom', async (roomId, { reject
     }
 })
 
+// export const SearchRooms = createAsyncThunk('searchrooms', async ({ check_in_date, check_out_date, roomtype }, { rejectWithValue }) => {
+//     try {
+//         const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/room/search_rooms?check_in_date=${check_in_date}&check_out_date=${check_out_date}&roomtype=${roomtype}`)
+//         return data?.rooms
+
+//     } catch (error) {
+//         return rejectWithValue(error?.response?.data?.message)
+//     }
+// })
+
 
 export const RoomSlice = createSlice({
     name: 'rooms',
     initialState,
     reducers: {
-        ClearRoomState : (state) => {
+        ClearRoomState: (state) => {
             state.loading = false
             state.room = {}
             state.error = ""
@@ -132,12 +149,27 @@ export const RoomSlice = createSlice({
             })
             .addCase(UpdateRoom.fulfilled, (state, action) => {
                 state.loading = false
+                state.updateroom = action.payload
+                state.error = ""
             })
             .addCase(UpdateRoom.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload
             })
 
+        // builder
+        //     .addCase(SearchRooms.pending, (state, action) => {
+        //         state.loading = true
+        //     })
+        //     .addCase(SearchRooms.fulfilled, (state, action) => {
+        //         state.loading = false
+        //         state.rooms = action.payload
+        //         state.error = ""
+        //     })
+        //     .addCase(SearchRooms.rejected, (state, action) => {
+        //         state.loading = false
+        //         state.error = action.payload
+        //     })
 
     }
 })

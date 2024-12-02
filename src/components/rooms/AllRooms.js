@@ -3,15 +3,17 @@ import Slider from "react-slick";
 import { Box, Grid, Card, CardContent, Typography, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { useDispatch, useSelector } from 'react-redux';
 import { GetAllRooms } from "../../features/RoomSlice";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Spinner from '../Spinner'
 import { Delete, Edit } from '@mui/icons-material';
 import { DeleteRoom } from '../../features/RoomSlice'
+import moment from "moment";
 
 const AllHotels = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch();
+
     const { rooms, loading } = useSelector((state) => state?.rooms);
     const { user } = useSelector((state) => state?.users);
 
@@ -37,10 +39,28 @@ const AllHotels = () => {
         }, 1500);
     };
 
+    const location = useLocation()
+    const SearchParams = new URLSearchParams(location.search)
+
+    const check_in_date = SearchParams.get('check_in_date')
+    const check_out_date = SearchParams.get('check_out_date')
+    const roomtype = SearchParams.get('roomtype')
+
 
     useEffect(() => {
-        dispatch(GetAllRooms())
-    }, []);
+        if (check_in_date && check_out_date && roomtype) {
+            dispatch(GetAllRooms(
+                {
+                    check_in_date: moment(check_in_date).toISOString(),
+                    check_out_date: moment(check_out_date).toISOString(),
+                    roomtype: roomtype
+                }
+            ));
+
+        } else{
+            dispatch(GetAllRooms({}));
+        }
+    }, [dispatch, check_in_date, check_out_date, roomtype]);
 
     // Carousel settings
     const carouselSettings = {
@@ -81,8 +101,8 @@ const AllHotels = () => {
                             }
                         }>
                         <Spinner />
-                    </p> 
-                    :
+                    </p>
+                        :
                         rooms.length > 0 ? (
                             rooms.map((room) => (
                                 <Grid
