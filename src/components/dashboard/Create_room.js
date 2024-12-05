@@ -21,11 +21,32 @@ const Create_Room = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
     const { hotels } = useSelector((state) => state?.hotels)
     const { room, error } = useSelector((state) => state?.rooms)
 
     const [isErrorAlert, setIsErrorAlert] = useState(false)
     const [isSuccessAlert, setIsSuccessAlert] = useState(false)
+    const [inputErrors, setInputErrors] = useState()
+
+
+    const validate = () => {
+        let newErrors = {}
+        if (value?.image?.length < 3) {
+            newErrors.imageError = "Add images more than 2"
+        }
+
+        if (value?.price?.length < 3) {
+            newErrors.priceError = "Price should be more than 100"
+        }
+
+        if (value?.description?.length < 22) {
+            newErrors.descriptionError = "Description should be more than 22"
+        }
+
+        setInputErrors(newErrors)
+        return Object.keys(newErrors).length === 0
+    }
 
     const [value, setValue] = useState(
         {
@@ -63,7 +84,11 @@ const Create_Room = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(value, "value")
+
+        if (!validate()) {
+            return
+        }
+
         const formData = new FormData()
         formData.append('hotelId', value?.hotelId)
         formData.append('roomtype', value?.roomtype)
@@ -168,6 +193,7 @@ const Create_Room = () => {
                     multiline
                     rows={3}
                 />
+                {inputErrors?.descriptionError && <p style={{ color: "red" }}>{inputErrors?.descripitonError}</p>}
 
                 {/* Price */}
                 <TextField
@@ -181,6 +207,7 @@ const Create_Room = () => {
                     onChange={(e) => handleOnChange(e)}
                     type="number"
                 />
+                {inputErrors?.priceError && <p style={{ color: "red" }}>{inputErrors?.priceError}</p>}
 
                 {/* Upload Images Button */}
                 <Grid item xs={12}>
@@ -211,6 +238,7 @@ const Create_Room = () => {
                         display="block"
                         mt={1}>
                         {value?.image?.length} file(s) selected
+                        {inputErrors?.imageError && <p style={{ color: "red" }}>{inputErrors?.imageError}</p>}
                     </Typography>
                 </Grid>
 

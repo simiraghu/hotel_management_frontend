@@ -10,7 +10,6 @@ const SignUp = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { error, user } = useSelector((state) => state.users)
-    console.log(error, user, "error, user")
 
     const [value, setvalue] = useState(
         {
@@ -23,6 +22,33 @@ const SignUp = () => {
     )
     const [isErrorAlert, setIsErrorAlert] = useState(false)
     const [isSuccessAlert, setIsSuccessAlert] = useState(false)
+    const [inputError, setInputError] = useState({})
+
+
+
+    const validate = () => {
+        let newErrors = {}
+        if (value?.username.length < 3) {
+            newErrors.userNameError = "User name must be 3 charactor long"
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value?.email)) {
+            newErrors.emailError = "Please write a valid email"
+        }
+
+        if (value?.password.length < 3) {
+            newErrors.passwordError = "Password must be 3 charactor long"
+        }
+
+        if (value?.phonenumber.length < 10) {
+            newErrors.phoneNumberError = "Phone number must be 10 number"
+        }
+
+        setInputError(newErrors)
+        return Object.keys(newErrors).length === 0
+    }
+
 
     const handleOnChange = (e) => {
         setvalue(
@@ -31,11 +57,15 @@ const SignUp = () => {
                 [e.target.name]: e.target.value
             }
         )
+        setInputError({})
     }
 
     const handleOnSubmit = (e) => {
         e.preventDefault(e)
-        console.log(value, "value")
+        if (!validate()) {
+            return
+        }
+
         dispatch(SignUpUser(value))
     }
 
@@ -84,6 +114,7 @@ const SignUp = () => {
                     <h1 className='signinheading'>Sign Up</h1>
                     {isSuccessAlert && <Alert severity="success">{user?.message}</Alert>}
                     {isErrorAlert && <Alert severity="error">{error}</Alert>}
+
                     <div>
                         <input
                             className='input'
@@ -93,6 +124,7 @@ const SignUp = () => {
                             value={value?.username}
                             onChange={(e) => handleOnChange(e)}
                         />
+                        {inputError?.userNameError && <p style={{ color: "red" }}>{inputError?.userNameError}</p>}
                     </div>
 
                     <div>
@@ -104,6 +136,7 @@ const SignUp = () => {
                             value={value?.email}
                             onChange={(e) => handleOnChange(e)}
                         />
+                        {inputError?.emailError && <p style={{ color: "red" }}>{inputError?.emailError}</p>}
                     </div>
 
                     <div>
@@ -115,6 +148,7 @@ const SignUp = () => {
                             value={value?.password}
                             onChange={(e) => handleOnChange(e)}
                         />
+                        {inputError?.passwordError && <p style={{ color: "red" }}>{inputError?.passwordError}</p>}
                     </div>
 
                     <div>
@@ -126,6 +160,7 @@ const SignUp = () => {
                             value={value?.phonenumber}
                             onChange={(e) => handleOnChange(e)}
                         />
+                        {inputError?.phoneNumberError && <p style={{ color: "red" }}>{inputError?.phoneNumberError}</p>}
                     </div>
 
                     <div>

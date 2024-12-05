@@ -10,9 +10,44 @@ import Alert from "@mui/material/Alert";
 
 const Create_hotel = () => {
 
+
+
+    const validate = () => {
+        let newErrors = {};
+        if (!value?.name?.length < 3) {
+            newErrors.nameError = "Name value must be 3 charactar long"
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value?.email)) {
+            newErrors.emailError = "Please write a valid email"
+        }
+
+        if (!value?.contactNo?.length < 10) {
+            newErrors.contactNoError = "Contact number must be 10 charactar long"
+        }
+
+        if (!value?.description?.length < 22) {
+            newErrors.descriptionError = "Description must be 22 charactor long"
+        }
+
+        if (value?.facilities?.length < 3) {
+            newErrors.facilitiesError = "Please add more than 3 facilities"
+        }
+
+        if (value?.image?.length < 2) {
+            newErrors.imageError = "Please add more than 2 images"
+        }
+
+        setInputErrors(newErrors)
+
+        return Object.keys(newErrors).length === 0
+    }
+
     const [facilitiesInput, setFacilitiesInput] = useState("")
     const [isErrorAlert, setIsErrorAlert] = useState(false)
     const [isSuccessAlert, setIsSuccessAlert] = useState(false)
+    const [inputErrors, setInputErrors] = useState({})
     const [value, setValue] = useState(
         {
             name: '',
@@ -29,7 +64,6 @@ const Create_hotel = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { error, hotel } = useSelector((state) => state?.hotels)
-    console.log(hotel, error)
 
     const handleOnChange = (e) => {
         setValue(
@@ -38,6 +72,7 @@ const Create_hotel = () => {
                 [e.target.name]: e.target.value
             }
         )
+        setInputErrors({})
     }
 
     const handleAddFacilities = () => {
@@ -75,6 +110,11 @@ const Create_hotel = () => {
 
     const handleOnsubmit = (e) => {
         e.preventDefault()
+
+        if (!validate()) {
+            return
+        }
+
         const formdata = new FormData()
 
         formdata.append('name', value?.name)
@@ -164,6 +204,7 @@ const Create_hotel = () => {
                             onChange={(e) => handleOnChange(e)}
                             required
                         />
+                        {inputErrors?.nameError && <p style={{ color: "red" }}>{inputErrors?.nameError}</p>}
                     </Grid>
 
                     {/* Email */}
@@ -177,6 +218,7 @@ const Create_hotel = () => {
                             onChange={(e) => handleOnChange(e)}
                             required
                         />
+                        {inputErrors?.emailError && <p style={{ color: "red" }}>{inputErrors?.emailError}</p>}
                     </Grid>
 
                     {/* Contact No */}
@@ -190,6 +232,7 @@ const Create_hotel = () => {
                             type="tel"
                             required
                         />
+                        {inputErrors?.contactNoError && <p style={{ color: "red" }}>{inputErrors?.contactNoError}</p>}
                     </Grid>
 
                     {/* Address */}
@@ -202,6 +245,7 @@ const Create_hotel = () => {
                             onChange={(e) => handleOnChange(e)}
                             required
                         />
+
                     </Grid>
 
                     {/* City */}
@@ -228,6 +272,7 @@ const Create_hotel = () => {
                             onChange={(e) => handleOnChange(e)}
                             required
                         />
+                        {inputErrors?.descriptionError && <p style={{ color: "red" }}>{inputErrors?.descriptionError}</p>}
                     </Grid>
 
                     {/* Facilities */}
@@ -259,6 +304,7 @@ const Create_hotel = () => {
                             >
                                 Add
                             </Button>
+                            {inputErrors?.facilitiesError && <p style={{ color: "red" }}>{inputErrors?.facilitiesError}</p>}
                         </Box>
 
                         <Box
@@ -314,6 +360,7 @@ const Create_hotel = () => {
                             display="block"
                             mt={1}>
                             {value?.image?.length} file(s) selected
+                            {inputErrors?.imageError && <p style={{ color: "red" }}>{inputErrors?.imageError}</p>}
                         </Typography>
 
                         <Box display="flex" flexWrap="wrap" gap={1}>

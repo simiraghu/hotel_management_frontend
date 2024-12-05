@@ -26,6 +26,9 @@ const BookingPage = () => {
 
     const [activeStep, setActiveStep] = useState(0);
     const [showSuccessPopUp, setShowSuccessPopUp] = useState(false);
+    const [isUserError, setUserError] = useState({});
+    const [isBookingError, setIsBookingError] = useState({});
+
     const steps = ["User Details", "Room Details", "Payment"];
 
     const dispatch = useDispatch()
@@ -34,7 +37,65 @@ const BookingPage = () => {
     const { room } = useSelector((state) => state?.rooms)
     const { booking } = useSelector((state) => state?.booking)
 
+
+    const userValidation = () => {
+        let UserError = {}
+
+        if (!value?.fullname || value?.fullname?.length < 3) {
+            UserError.fullnameError = "Full name should be 3 char long"
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!value?.email || !emailRegex?.test(value?.email)) {
+            UserError.emailError = "Please write valid email"
+        }
+
+        if (!value?.phone_number || value?.phone_number?.length < 10) {
+            UserError.phone_numberError = "Phone Number should be 10 number"
+        }
+
+        if (!value?.address) {
+            UserError.addressError = "Address required"
+        }
+        setUserError(UserError)
+        return Object.keys(UserError).length === 0
+    }
+
+    const bookingValidation = () => {
+        let bookingError = {}
+
+
+        if (!value?.check_in_date) {
+            bookingError.check_in_date_error = "Check in date required"
+        }
+
+        if (!value?.check_out_date) {
+            bookingError.check_out_date_error = "Check out date required"
+        }
+
+        if (value?.guests !== 0) {
+            bookingError.guestsError = "Guests should be 1 or more than one"
+        }
+
+        setIsBookingError(bookingError)
+        return Object.keys(bookingError).length === 0
+    }
+
+
     const handleNext = () => {
+
+        if (activeStep === 0) {
+            if (!userValidation()) {
+                return
+            }
+        }
+
+        if (activeStep === 1) {
+            if (!bookingValidation()) {
+                return
+            }
+        }
+
         if (activeStep < steps.length - 1) {
             setActiveStep(activeStep + 1);
         }
@@ -75,6 +136,8 @@ const BookingPage = () => {
     const navigate = useNavigate()
 
     const handleOnChange = (e) => {
+        setUserError({})
+        setIsBookingError({})
         setValue(
             {
                 ...value,
@@ -91,6 +154,10 @@ const BookingPage = () => {
     const handleOnSubmit = async (e) => {
 
         e.preventDefault()
+        if (!userValidation() && !bookingValidation()) {
+            return
+        }
+
         const cardElement = elements.getElement(CardElement);
 
         const { error, paymentMethod } = await stripe.createPaymentMethod(
@@ -164,6 +231,7 @@ const BookingPage = () => {
                                     value={value?.fullname}
                                     onChange={(e) => handleOnChange(e)}
                                     variant="outlined" />
+                                {isUserError?.fullnameError && <p style={{ color: "red" }}>{isUserError?.fullnameError}</p>}
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
@@ -174,6 +242,7 @@ const BookingPage = () => {
                                     value={value?.email}
                                     onChange={(e) => handleOnChange(e)}
                                     variant="outlined" />
+                                {isUserError?.emailError && <p style={{ color: "red" }}>{isUserError?.emailError}</p>}
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
@@ -185,6 +254,7 @@ const BookingPage = () => {
                                     value={value?.phone_number}
                                     onChange={(e) => handleOnChange(e)}
                                     variant="outlined" />
+                                {isUserError?.phone_numberError && <p style={{ color: "red" }}>{isUserError?.phone_numberError}</p>}
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
@@ -195,6 +265,7 @@ const BookingPage = () => {
                                     value={value?.address}
                                     onChange={(e) => handleOnChange(e)}
                                     variant="outlined" />
+                                {isUserError?.addressError && <p style={{ color: "red" }}>{isUserError?.addressError}</p>}
                             </Grid>
                         </Grid>
                     </Box>
@@ -220,6 +291,7 @@ const BookingPage = () => {
                                     InputLabelProps={{ shrink: true }}
                                     variant="outlined"
                                 />
+                                {isBookingError?.check_in_date_error && <p style={{ color: "red" }}>{isBookingError?.check_in_date_error}</p>}
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
@@ -233,6 +305,7 @@ const BookingPage = () => {
                                     InputLabelProps={{ shrink: true }}
                                     variant="outlined"
                                 />
+                                {isBookingError?.check_out_date_error && <p style={{ color: "red" }}>{isBookingError?.check_out_date_error}</p>}
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
@@ -245,6 +318,7 @@ const BookingPage = () => {
                                     onChange={(e) => handleOnChange(e)}
                                     variant="outlined"
                                 />
+                                {isBookingError?.guestsError && <p style={{ color: "red" }}>{isBookingError?.guestsError}</p>}
                             </Grid>
 
                             <Grid item xs={12} sx={{ marginBottom: '1rem' }}>
