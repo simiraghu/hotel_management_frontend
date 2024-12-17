@@ -21,6 +21,7 @@ const HotelManagementDashboard = () => {
                         padding: "20px",
                         height: "40vh",
                         marginTop: '6vh',
+                        marginBottom: '100px'
                     }
                 }
             >

@@ -66,7 +66,7 @@ const AllHotels = () => {
                 spacing={3}
                 sx={
                     {
-                        m: 2,
+                        mt: 2,
                     }
                 }
 
