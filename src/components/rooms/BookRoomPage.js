@@ -73,7 +73,7 @@ const BookingPage = () => {
             bookingError.check_out_date_error = "Check out date required"
         }
 
-        if (value?.guests !== 0) {
+        if (!value?.guests) {
             bookingError.guestsError = "Guests should be 1 or more than one"
         }
 

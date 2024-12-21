@@ -16,8 +16,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { GetHotelById } from "../../features/HotelSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from '../Spinner'
+import { useTheme } from "@emotion/react";
 
 const HotelDetailsPage = () => {
+
+    const theme = useTheme()
 
     const sliderSettings = {
         dots: true,
@@ -204,85 +207,79 @@ const HotelDetailsPage = () => {
                                         }
                                     </Box>
                                 </Box>
+                            
+                            </Grid>
+                        </Grid>
 
-                                {/* Room Types */}
-                                <Box>
+{/* Room Types */}
+<Box>
                                     <Typography
                                         variant="h6"
-                                        sx={
-                                            {
-                                                fontWeight: "bold",
-                                                marginBottom: "10px",
-                                                color: "#27877e"
-                                            }
-                                        }>
+                                        sx={{
+                                            fontWeight: "bold",
+                                            marginBottom: "10px",
+                                            color: "#27877e",
+                                            
+                                        }}
+                                    >
                                         Room Types
                                     </Typography>
 
                                     <Grid
                                         container
                                         spacing={5}
-                                        sx={
-                                            {
-                                                marginLeft: "15vw"
-                                            }
-                                        }>
-
+                                        sx={{m: 'auto'}}
+                                    >
+                                        {/* Deluxe Room */}
                                         <Grid item xs={12} sm={6}>
                                             <Card
-                                                sx={
-                                                    {
-                                                        borderRadius: "10px"
-                                                    }
-                                                }>
+                                                sx={{
+                                                    borderRadius: "10px",
+                                                }}
+                                            >
                                                 <img
                                                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8AMBvRFxrh7XEU39PQp15-QE__Iui_aapZQ&s"
                                                     alt="Deluxe"
-                                                    style={
-                                                        {
-                                                            width: "100%",
-                                                            height: "200px",
-                                                            objectFit: "cover",
-                                                            borderTopLeftRadius: "10px",
-                                                            borderTopRightRadius: "10px",
-                                                        }
-                                                    }
+                                                    style={{
+                                                        width: "100%",
+                                                        height: "200px",
+                                                        objectFit: "cover",
+                                                        borderTopLeftRadius: "10px",
+                                                        borderTopRightRadius: "10px",
+                                                    }}
                                                 />
-
                                                 <CardContent>
-                                                    <Typography variant="h6">{hotel?.name} {""} Deluxe Room</Typography>
+                                                    <Typography variant="h6">
+                                                        {hotel?.name} Deluxe Room
+                                                    </Typography>
 
                                                     <Typography
                                                         variant="body2"
-                                                        sx={
-                                                            {
-                                                                marginBottom: "10px",
-                                                                color: "#27877e"
-                                                            }
-                                                        }>
+                                                        sx={{
+                                                            marginBottom: "10px",
+                                                            color: "#27877e",
+                                                        }}
+                                                    >
                                                         Features: King Bed, City View, Free Breakfast.
                                                     </Typography>
 
                                                     <Typography
                                                         variant="h6"
-                                                        sx={
-                                                            {
-                                                                fontWeight: "bold",
-                                                                color: "#27877e"
-                                                            }
-                                                        }>
+                                                        sx={{
+                                                            fontWeight: "bold",
+                                                            color: "#27877e",
+                                                        }}
+                                                    >
                                                         5000 per 24 hour
                                                     </Typography>
 
                                                     <Button
                                                         variant="contained"
                                                         size="small"
-                                                        sx={
-                                                            {
-                                                                marginTop: "10px",
-                                                                backgroundColor: "#27877e"
-                                                            }
-                                                        }
+                                                        sx={{
+                                                            marginTop: "10px",
+                                                            backgroundColor: "#27877e",
+                                                        }}
                                                         onClick={() => handleDeluxeRoom(hotelId, "Deluxe")}
                                                     >
                                                         View Rooms
@@ -291,72 +288,70 @@ const HotelDetailsPage = () => {
                                             </Card>
                                         </Grid>
 
+                                        {/* Family Room */}
                                         <Grid item xs={12} sm={6}>
                                             <Card
-                                                sx={
-                                                    {
-                                                        borderRadius: "10px"
-                                                    }
-                                                }>
+                                                sx={{
+                                                    borderRadius: "10px",
+                                                }}
+                                            >
                                                 <img
                                                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ20O5WN6l5BrXGMaaGupWwAp_LCrcPU0txqw&s"
                                                     alt="Family"
-                                                    style={
-                                                        {
-                                                            width: "100%",
-                                                            height: "200px",
-                                                            objectFit: "cover",
-                                                            borderTopLeftRadius: "10px",
-                                                            borderTopRightRadius: "10px",
-                                                        }
-                                                    }
+                                                    style={{
+                                                        width: "100%",
+                                                        height: "200px",
+                                                        objectFit: "cover",
+                                                        borderTopLeftRadius: "10px",
+                                                        borderTopRightRadius: "10px",
+                                                    }}
                                                 />
                                                 <CardContent>
-                                                    <Typography variant="h6" sx={{ color: "#27877e" }}>{hotel?.name} {""} Family Room</Typography>
+                                                    <Typography
+                                                        variant="h6"
+                                                        sx={{
+                                                            color: "#27877e",
+                                                        }}
+                                                    >
+                                                        {hotel?.name} Family Room
+                                                    </Typography>
 
                                                     <Typography
                                                         variant="body2"
-                                                        sx={
-                                                            {
-                                                                marginBottom: "10px",
-                                                                color: "#27877e"
-                                                            }
-                                                        }>
+                                                        sx={{
+                                                            marginBottom: "10px",
+                                                            color: "#27877e",
+                                                        }}
+                                                    >
                                                         Features: King Bed, City View, Free Breakfast.
                                                     </Typography>
 
                                                     <Typography
                                                         variant="h6"
-                                                        sx={
-                                                            {
-                                                                fontWeight: "bold",
-                                                                color: "#27877e"
-                                                            }
-                                                        }>
+                                                        sx={{
+                                                            fontWeight: "bold",
+                                                            color: "#27877e",
+                                                        }}
+                                                    >
                                                         10000 per 24 hour
                                                     </Typography>
 
                                                     <Button
                                                         variant="contained"
                                                         size="small"
-                                                        sx={
-                                                            {
-                                                                marginTop: "10px",
-                                                                backgroundColor: "#27877e"
-                                                            }
-                                                        }
+                                                        sx={{
+                                                            marginTop: "10px",
+                                                            backgroundColor: "#27877e",
+                                                        }}
                                                         onClick={() => handleDeluxeRoom(hotelId, "Family")}
                                                     >
-                                                        View rooms
+                                                        View Rooms
                                                     </Button>
                                                 </CardContent>
                                             </Card>
                                         </Grid>
                                     </Grid>
                                 </Box>
-                            </Grid>
-                        </Grid>
-
                     </Box>
             }
         </>
