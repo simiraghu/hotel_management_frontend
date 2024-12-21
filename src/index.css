@@ -64,7 +64,7 @@
 
 .input {
   padding: 12px;
-  margin: 10px 0;
+  margin: 15px 40px;
   border: 1px solid black;
   border-radius: 20px;
   font-size: 1rem;
@@ -93,7 +93,7 @@
 
 .rightSideInputsforSignup {
   text-align: center;
-  width: 50vw;
+  width: 70vw;
 }
 
 .leftSideContent {
@@ -141,6 +141,7 @@
   .signinbutton {
     width: 80%;
     padding: 10px;
+    margin: 5px;
   }
 
   .signinheading {
@@ -168,11 +169,13 @@
   }
 
   .signupbutton {
-    width: 60%;
+    width: 80%;
+    margin: 5px;
   }
 
   .signinbutton {
-    width: 60%;
+    width: 80%;
+    margin: 5px;
   }
 
   .leftSideText {
